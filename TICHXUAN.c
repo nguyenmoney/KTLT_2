@@ -1,4 +1,4 @@
-﻿// --- KHAI BAO CAC THU VIEN ---
+// --- KHAI BAO CAC THU VIEN ---
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -15,7 +15,7 @@
 #endif
 
 // ---KHAI BAO TEP GHI CHEP PHIEN LAM VIEC---
-#define TEN_TEP_LOG "tichxuan_log.txt"
+#define TEN_TEP_LOG "file_log.txt"
 
 // --- DINH NGHIA CAU TRUC DU LIEU ---
 typedef struct {
@@ -106,7 +106,7 @@ int menu_chon_chuc_nang();
 // --- HAM MAIN ---
 int main() {
     mo_tep_log();
-    ghi_vao_log("Chuong trinh bat dau.");
+    ghi_vao_log("Chuong trinh bat dau."); //Mo dau phien lam viec
 
     char luaChonTiepTuc[10];
     int luaChonChucNang = 0;
@@ -118,11 +118,11 @@ int main() {
 
         if (luaChonChucNang >= 1 && luaChonChucNang <= 3) {
             di_den_XY(0, dongThongBaoY);
-            hien_thi_trang_thai(1);
+			hien_thi_trang_thai(1); // Hien con tro chuot
             printf("Nhan phim bat ky de tiep tuc..."); 
-            int ch = _getch();  
+			int ch = _getch(); // Nhan phim bat ky de tiep tuc
             (void)ch; 
-            hien_thi_trang_thai(0);
+			hien_thi_trang_thai(0); // An tat con tro chuot
         }
 
         if (luaChonChucNang == 0) { // Neu ESC duoc nhan trong menu_chon_chuc_nang (thoat menu do)
@@ -136,16 +136,16 @@ int main() {
             di_den_XY(0, dongThongBaoY + 1);
             hien_thi_trang_thai(1);
             printf("Ban co muon thuc hien chuc nang khac khong? (co/khong): ");
-            fgets(luaChonTiepTuc, sizeof(luaChonTiepTuc), stdin);
+			fgets(luaChonTiepTuc, sizeof(luaChonTiepTuc), stdin); // Doc lua chon tiep tuc
             luaChonTiepTuc[strcspn(luaChonTiepTuc, "\n")] = '\0';
             for (int i = 0; luaChonTiepTuc[i]; i++) {
-                luaChonTiepTuc[i] = tolower(luaChonTiepTuc[i]);
+                luaChonTiepTuc[i] = tolower(luaChonTiepTuc[i]); 
             }
             if (strcmp(luaChonTiepTuc, "co") != 0 && strcmp(luaChonTiepTuc, "c") != 0) {
-                ghi_vao_log("Nguoi dung chon khong tiep tuc.");
+				ghi_vao_log("Nguoi dung chon khong tiep tuc."); //Neu chon khong tiep tuc
             }
             else {
-                ghi_vao_log("Nguoi dung chon tiep tuc.");
+				ghi_vao_log("Nguoi dung chon tiep tuc."); // Neu chon tiep tuc
             }
         }
         else { // Truong hop khong xac dinh, hoac menu_chon_ham vua ket thuc lan dau
@@ -154,12 +154,10 @@ int main() {
     } while (strcmp(luaChonTiepTuc, "co") == 0 || strcmp(luaChonTiepTuc, "c") == 0);
 
     if (hamSoToanCuc.loai == DA_THUC) {
-        giai_phong_da_thuc(&hamSoToanCuc.duLieu.daThuc);
+		giai_phong_da_thuc(&hamSoToanCuc.duLieu.daThuc); //Giai phong bo nho da thuc
     }
-    // *** SUA LOI MAN HINH TRANG KHI THOAT ***
     mau_chu(7); // Dat lai mau mac dinh TRUOC KHI xoa man hinh
-    system("cls");
-    // mau_chu(7); // Dong nay da co o tren, khong can thiet nua
+    system("cls"); // Xoa man hinh
     printf("Chuong trinh da ket thuc.\n");
     ghi_vao_log("Chuong trinh ket thuc.");
     dong_tep_log();
@@ -167,24 +165,20 @@ int main() {
 }
 
 // --- DINH NGHIA CAC HAM ---
-// ... (Cac ham con lai giu nguyen nhu trong phien ban ban da cung cap) ...
-// (Toi se khong dan lai toan bo cac ham con o day de tiet kiem khong gian,
-//  vi thay doi chi nam o cuoi ham main)
-
-// LOG: Dinh nghia cac ham quan ly log
+ // 0. Cac ham xu ly tep log
 void mo_tep_log() {
-    g_tep_log = fopen(TEN_TEP_LOG, "a");
+	g_tep_log = fopen(TEN_TEP_LOG, "a");// Mo tep log de ghi chep phien lam viec
     if (g_tep_log == NULL) {
-        perror("Khong the mo tep log");
+        perror("Khong the mo tep log"); 
     }
     else {
-        time_t baygio = time(NULL);
+		time_t baygio = time(NULL); //Lay thoi gian hien tai
         char* thoi_gian_hien_tai = ctime(&baygio);
         if (thoi_gian_hien_tai[strlen(thoi_gian_hien_tai) - 1] == '\n') {
             thoi_gian_hien_tai[strlen(thoi_gian_hien_tai) - 1] = '\0';
         }
         fprintf(g_tep_log, "\n--- PHIEN LAM VIEC MOI: %s ---\n", thoi_gian_hien_tai);
-        fflush(g_tep_log);
+		fflush(g_tep_log); // Dong bo tep log ngay lap tuc
     }
 }
 
@@ -193,7 +187,7 @@ void dong_tep_log() {
         fprintf(g_tep_log, "--- KET THUC PHIEN LAM VIEC ---\n\n");
         fflush(g_tep_log);
         fclose(g_tep_log);
-        g_tep_log = NULL;
+		g_tep_log = NULL; // Dong tep log
     }
 }
 
@@ -208,7 +202,7 @@ void ghi_vao_log(const char* thong_diep) {
     }
 }
 
-// 1. Console & Utilities
+// 1. Dieu khien menu va giao dien nguoi dung
 void di_den_XY(int x, int y) {
     COORD coord = { (SHORT)x, (SHORT)y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
@@ -231,40 +225,40 @@ void hien_thi_trang_thai(int state) {
 
 void clear_stdin() {
     int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+	while ((c = getchar()) != '\n' && c != EOF); // Xoa bo dem nhap
 }
 
 bool la_so_chan(int n) {
-    return n % 2 == 0;
+	return n % 2 == 0; // Kiem tra so chan
 }
 
-// 2. DaThuc Helpers
+// 2. Xu ly da thuc
 void khoi_tao_da_thuc(DaThuc* dt) {
     dt->cac_so_hang = NULL;
     dt->so_luong_so_hang = 0;
     dt->kich_thuoc_da_cap_phat = 0;
-}
+} // Khoi tao da thuc voi cac truong mac dinh
 
 void giai_phong_da_thuc(DaThuc* dt) {
     if (dt) {
         free(dt->cac_so_hang);
         khoi_tao_da_thuc(dt);
     }
-}
+}// Giai phong bo nho da thuc
 
 void xoa_so_hang(DaThuc* dt, int index) {
-    if (!dt || index < 0 || index >= dt->so_luong_so_hang) {
+	if (!dt || index < 0 || index >= dt->so_luong_so_hang) { //Kiem tra neu da thuc NULL hoac index khong hop le
         return;
     }
-    memmove(&dt->cac_so_hang[index], &dt->cac_so_hang[index + 1], (dt->so_luong_so_hang - index - 1) * sizeof(SoHang));
-    dt->so_luong_so_hang--;
+	memmove(&dt->cac_so_hang[index], &dt->cac_so_hang[index + 1], (dt->so_luong_so_hang - index - 1) * sizeof(SoHang)); //Dich chuyen cac so hang sau index ve truoc 1 vi tri
+	dt->so_luong_so_hang--; //Giam so luong so hang
 }
 
 int them_so_hang_vao_da_thuc(DaThuc* dt, double hs, int b) {
-    if (!dt) {
+	if (!dt) { //Kiem tra neu da thuc NULL
         return 0;
     }
-    if (fabs(hs) < 1e-9) {
+    if (fabs(hs) < 1e-9) { // Neu he so gan bang 0, khong can them vao da thuc
         return 1;
     }
     for (int i = 0; i < dt->so_luong_so_hang; i++) {
@@ -274,7 +268,7 @@ int them_so_hang_vao_da_thuc(DaThuc* dt, double hs, int b) {
                 xoa_so_hang(dt, i);
             }
             return 1;
-        }
+		}// Neu da ton tai so hang cung bac, cong he so vao
     }
     if (dt->so_luong_so_hang >= dt->kich_thuoc_da_cap_phat) {
         int new_size = dt->kich_thuoc_da_cap_phat == 0 ? 10 : dt->kich_thuoc_da_cap_phat * 2;
@@ -285,11 +279,11 @@ int them_so_hang_vao_da_thuc(DaThuc* dt, double hs, int b) {
         }
         dt->cac_so_hang = temp;
         dt->kich_thuoc_da_cap_phat = new_size;
-    }
+	}// Neu can, cap phat bo nho cho cac so hang
     dt->cac_so_hang[dt->so_luong_so_hang] = (SoHang){ hs, b };
     dt->so_luong_so_hang++;
     return 1;
-}
+}//Ket thuc them so hang vao da thuc
 
 bool xau_sang_daThuc(const char* str, DaThuc* dt) {
     const char* p = str;
@@ -305,7 +299,7 @@ bool xau_sang_daThuc(const char* str, DaThuc* dt) {
         return false; // Coi nhu loi
     }
     if (*temp_p_check_empty == '\0' && strlen(str) == 0) { // Chuoi rong ""
-        return true; // Coi nhu da thuc 0, parse thanh cong
+		return true; // Coi nhu da thuc 0, khong can them so hang nao
     }
 
 
@@ -392,7 +386,7 @@ void nhap_da_thuc(DaThuc* dt) {
     char input_buffer[1024];
     khoi_tao_da_thuc(dt); // Luon khoi tao truoc
     printf("Nhap da thuc (vi du: 3x^2 - 5.1x + 9): ");
-    fgets(input_buffer, sizeof(input_buffer), stdin);
+	fgets(input_buffer, sizeof(input_buffer), stdin); // Doc chuoi nhap vao
     input_buffer[strcspn(input_buffer, "\n")] = '\0';
     char log_msg[1100];
     sprintf(log_msg, "Nguoi dung nhap da thuc: \"%s\"", input_buffer);
@@ -405,7 +399,7 @@ void nhap_da_thuc(DaThuc* dt) {
 }
 
 int so_sanh_so_hang(const void* a, const void* b) {
-    return ((SoHang*)b)->bac - ((SoHang*)a)->bac;
+	return ((SoHang*)b)->bac - ((SoHang*)a)->bac;// So sanh theo bac giam dan
 }
 
 void hien_thi_da_thuc(DaThuc dt) {
@@ -439,22 +433,22 @@ void hien_thi_da_thuc(DaThuc dt) {
 double tinh_gia_tri_da_thuc(DaThuc dt, double giaTriX) {
     double ketQua = 0.0;
     for (int i = 0; i < dt.so_luong_so_hang; ++i) {
-        ketQua += dt.cac_so_hang[i].he_so * pow(giaTriX, dt.cac_so_hang[i].bac);
+		ketQua += dt.cac_so_hang[i].he_so * pow(giaTriX, dt.cac_so_hang[i].bac); //Tinh gia tri bang cach cong tung so hang
     }
     return ketQua;
 }
 
-// 3. Other Function Helpers
+// 3.Cac ham xu ly ham luong giac va can thuc
 bool xau_sang_hamLuongGiac(const char* str, HamLuongGiac* hlg) {
     hlg->a = 0.0;
     hlg->b = 0.0;
-    const char* p = str;
-    bool found_any_valid_term = false;
-    bool parse_ok = true;
+    const char* p = str; 
+	bool found_any_valid_term = false; // Bien kiem tra xem co tim thay term hop le nao khong
+	bool parse_ok = true; // Bien kiem tra tinh hop le cua chuoi nhap vao
 
     const char* p_check_empty = str;
     while (isspace((unsigned char)*p_check_empty)) {
-        p_check_empty++;
+		p_check_empty++;// Bo qua khoang trang o dau
     }
     if (*p_check_empty == '\0') { // Chuoi rong hoac toan khoang trang
         return true; // Chap nhan la 0sin + 0cos
@@ -462,12 +456,21 @@ bool xau_sang_hamLuongGiac(const char* str, HamLuongGiac* hlg) {
 
     while (*p) {
         while (isspace((unsigned char)*p)) { p++; }
-        if (*p == '\0') { break; }
+        if (*p == '\0') { 
+            break; 
+        }
 
         double sign = 1.0;
-        if (*p == '-') { sign = -1.0; p++; }
-        else if (*p == '+') { p++; }
-        while (isspace((unsigned char)*p)) { p++; }
+        if (*p == '-') { 
+            sign = -1.0; 
+            p++; 
+        }
+        else if (*p == '+') { 
+            p++; 
+        }
+        while (isspace((unsigned char)*p)) { 
+            p++; 
+        }
 
         double coeff = 1.0;
         char* end;
@@ -475,7 +478,9 @@ bool xau_sang_hamLuongGiac(const char* str, HamLuongGiac* hlg) {
             coeff = strtod(p, &end);
             p = end;
         }
-        while (isspace((unsigned char)*p) || *p == '*') { p++; }
+        while (isspace((unsigned char)*p) || *p == '*') { 
+            p++; 
+        }
 
         if (strncmp(p, "sin(x)", 6) == 0) {
             hlg->a += sign * coeff;
@@ -494,7 +499,9 @@ bool xau_sang_hamLuongGiac(const char* str, HamLuongGiac* hlg) {
             break;
         }
     }
-    while (isspace((unsigned char)*p)) { p++; }
+    while (isspace((unsigned char)*p)) { 
+        p++; 
+    }
     if (*p != '\0') { // Ky tu thua o cuoi
         parse_ok = false;
     }
@@ -511,7 +518,7 @@ void nhap_ham_luong_giac(HamLuongGiac* hlg) {
     char input_buffer[256];
     hlg->a = 0.0; hlg->b = 0.0; // Khoi tao mac dinh
     printf("Nhap ham luong giac (dang: a*sin(x) + b*cos(x)): ");
-    fgets(input_buffer, sizeof(input_buffer), stdin);
+	fgets(input_buffer, sizeof(input_buffer), stdin); // Doc chuoi nhap vao
     input_buffer[strcspn(input_buffer, "\n")] = '\0';
     char log_msg[300];
     sprintf(log_msg, "Nguoi dung nhap ham luong giac: \"%s\"", input_buffer);
@@ -623,7 +630,6 @@ void hien_thi_ham_so(HamSo hs) {
         // Logic de tao chuoi cho da thuc (co the phuc tap tuy theo yeu cau dinh dang)
         if (hs.duLieu.daThuc.so_luong_so_hang > 0) {
             // Tao chuoi dai dien cho da thuc de ghi log
-            // Day la mot vi du don gian, ban co the lam chi tiet hon
             strcpy(ham_so_str, "Da thuc: ");
             char term_buffer[50];
             for (int i = 0; i < hs.duLieu.daThuc.so_luong_so_hang && strlen(ham_so_str) < 450; ++i) {
@@ -657,7 +663,7 @@ void hien_thi_ham_so(HamSo hs) {
     ghi_vao_log(log_msg);
 }
 
-// 4. Main Calculation Functions
+// 4. Cac ham tinh toan
 double tinh_gia_tri_ham_so(HamSo hs, double giaTriX) {
     switch (hs.loai) {
     case DA_THUC:
@@ -727,7 +733,7 @@ double phuong_phap_simpson(HamSo hs, double a, double b, int n) {
     return sum * h / 3.0;
 }
 
-// 5. UI Logic Functions (Khong goi _getch() hay system("pause") o cuoi)
+// 5. Xu ly cac chuc nang 
 void xu_ly_gia_tri_tai_X(HamSo hs) {
     double x;
     int precision_val;
@@ -922,15 +928,17 @@ void xu_ly_simpson(HamSo hs) {
     }
 }
 
-// 6. Enhanced UI Drawing Functions
+// 6. Hien thi giao dien
 void hien_thi_tieu_de_chuong_trinh() {
     di_den_XY(toaDoXMenu - 15, 2);
     chinh_mau_sac(14); // Mau vang
-    printf("*******************************************************************************\n");
+    printf("===============================================================================\n");
     di_den_XY(toaDoXMenu - 15, 3);
-    printf("* CHUONG TRINH TINH TICH PHAN SO                         *\n");
+    chinh_mau_sac(4); // Mau do
+    printf("                          CHUONG TRINH TINH TICH PHAN\n");
     di_den_XY(toaDoXMenu - 15, 4);
-    printf("*******************************************************************************\n");
+    chinh_mau_sac(14); // Mau vang
+    printf("===============================================================================\n");
     chinh_mau_sac(7); // Tra lai mau mac dinh
 }
 
@@ -1007,7 +1015,7 @@ void ve_them_vien(int x, int y, int w, int h, int mauVien, int mauNenChuTrong, i
     }
 }
 
-// 7. Menu Functions
+// 7. Cac ham xu ly va hien thi 
 void menu_chon_ham() {
     system("cls");
     hien_thi_tieu_de_chuong_trinh();
